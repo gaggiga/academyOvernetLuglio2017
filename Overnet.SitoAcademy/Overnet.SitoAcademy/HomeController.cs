@@ -11,20 +11,27 @@ namespace Overnet.SitoAcademy
     {
         public string Index()
         {
-            var saluto = ConfigurationManager.AppSettings["saluto"];
-            var data = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+            var model = new Modello();
+            model.Saluto = ConfigurationManager.AppSettings["saluto"];
+            model.Data = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 
-            return Vista(saluto, data);
+            return Vista(model);
         }
 
-        private string Vista(string saluto, string data)
+        private string Vista(Modello model)
         {
             var result = $"<!DOCTYPE html><html><head><meta charset=\"utf-8\">"
                        + $"<title>Prima prova</title></head>"
-                       + $"<body><h2>{saluto}</h2>"
-                       + $"<p>{data}</p></body></html>";
+                       + $"<body><h2>{model.Saluto}</h2>"
+                       + $"<p>{model.Data}</p></body></html>";
 
             return result;
         }
+    }
+
+    public class Modello
+    {
+        public string Saluto { get; set; }
+        public string Data { get; set; }
     }
 }
