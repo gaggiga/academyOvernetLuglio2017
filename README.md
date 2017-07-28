@@ -4,5 +4,6 @@ Repository dedicato all'academy programmatore Backend .Net di Luglio 2017 - Sede
 Questi gli studenti:
 
 - @maurosan95
+- @ninolc
 - @revolverjohn
 - @AlexanderPaule
