@@ -20,6 +20,7 @@ namespace Overnet.SitoAcademy
             model.Studenti.Add("Marcantonio Cilia");
             model.Studenti.Add("Alexandru Polevoi");
             model.Studenti.Add("Florio Pasquale");
+            model.Studenti.Add("Nino La Corte");
 
             return View(model);
         }
