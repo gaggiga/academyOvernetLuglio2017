@@ -1,12 +1,8 @@
 ﻿@model Overnet.SitoAcademy.Modello
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Prima prova</title>
-</head>
-<body>
-    <h2>@this.Model.Saluto</h2>
-    <p>@this.Model.Data</p>
-</body>
-</html>
+
+@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model.Saluto;
+}
+
+<p>@Model.Data</p>
