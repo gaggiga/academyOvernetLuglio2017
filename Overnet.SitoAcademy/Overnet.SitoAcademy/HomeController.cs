@@ -16,6 +16,7 @@ namespace Overnet.SitoAcademy
             model.Data = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 
             model.Studenti.Add("Sanna Mauro");
+            model.Studenti.Add("Giovanni Improta");
 
             return View(model);
         }
