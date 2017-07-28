@@ -6,6 +6,12 @@
 
 <p>@Model.Data</p>
 
+<ul>
+    @foreach(var s in Model.Studenti)
+    {
+        <li>@s</li>
+    }
+</ul>
 
 @section head {
     <meta description="Questa è la nostra fantastica home" />

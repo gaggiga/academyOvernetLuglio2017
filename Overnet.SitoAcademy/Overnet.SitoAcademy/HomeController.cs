@@ -15,6 +15,8 @@ namespace Overnet.SitoAcademy
             model.Saluto = ConfigurationManager.AppSettings["saluto"];
             model.Data = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 
+            model.Studenti.Add("Sanna Mauro");
+
             return View(model);
         }
     }
@@ -23,5 +25,11 @@ namespace Overnet.SitoAcademy
     {
         public string Saluto { get; set; }
         public string Data { get; set; }
+        public SortedSet<string> Studenti { get; set; }
+
+        public Modello()
+        {
+            this.Studenti = new SortedSet<string>();
+        }
     }
 }
