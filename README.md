@@ -5,3 +5,5 @@ Questi gli studenti:
 
 - @maurosan95
 - @marcantonioCilia
+- @ninolc
+- @revolverjohn
