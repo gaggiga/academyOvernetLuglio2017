@@ -17,6 +17,7 @@ namespace Overnet.SitoAcademy
 
             model.Studenti.Add("Sanna Mauro");
             model.Studenti.Add("Giovanni Improta");
+            model.Studenti.Add("Marcantonio Cilia");
 
             return View(model);
         }
