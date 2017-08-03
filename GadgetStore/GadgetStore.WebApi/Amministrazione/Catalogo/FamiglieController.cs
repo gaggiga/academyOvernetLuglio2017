@@ -10,6 +10,7 @@ using System.Web.Http.Description;
 
 namespace GadgetStore.WebApi.Amministrazione.Catalogo
 {
+    //[Authorize(Roles = "Amministratore")]
     public class FamiglieController : ApiController
     {
         private MyDbContext db = new MyDbContext();
