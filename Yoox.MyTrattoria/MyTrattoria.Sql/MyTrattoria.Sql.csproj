@@ -56,6 +56,7 @@
     <Compile Include="Entities\Ordine.cs" />
     <Compile Include="Entities\Pietanza.cs" />
     <Compile Include="Entities\StatoComanda.cs" />
+    <Compile Include="Entities\StatoTavolo.cs" />
     <Compile Include="Entities\Tavolo.cs" />
     <Compile Include="Migrations\201708301250201_StrutturaIniziale.cs" />
     <Compile Include="Migrations\201708301250201_StrutturaIniziale.Designer.cs">

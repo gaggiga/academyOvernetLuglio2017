@@ -21,6 +21,17 @@ namespace MyTrattoria.Sql
             return tavolo;
         }
 
+        public bool ExistsTavolo(string sigla)
+        {
+            return db.Tavoli.Any(t => t.Sigla == sigla);
+        }
+
+        public IEnumerable<Tavolo> GetTavoli()
+        {
+            return db.Tavoli.Include("Ordini.Comande");
+        }
+
+
         public Tavolo GetTavolo(int id)
         {
             return db.Tavoli.Include("Ordini.Comande").FirstOrDefault(t => t.Id == id);
