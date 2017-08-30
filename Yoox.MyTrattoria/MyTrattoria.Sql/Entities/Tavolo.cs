@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace MyTrattoria.Sql.Entities
     public class Tavolo
     {
         public int Id { get; set; }
+        [Required, StringLength(10)]
+        public string Sigla { get; set; }
         public ICollection<Ordine> Ordini { get; set; }
         public DateTime DataCreazione { get; set; }
 
