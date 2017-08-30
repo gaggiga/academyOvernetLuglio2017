@@ -40,10 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Comanda.cs" />
+    <Compile Include="Entities\Incasso.cs" />
+    <Compile Include="Entities\Ordine.cs" />
+    <Compile Include="Entities\Pietanza.cs" />
+    <Compile Include="Entities\StatoComanda.cs" />
+    <Compile Include="Entities\Tavolo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
