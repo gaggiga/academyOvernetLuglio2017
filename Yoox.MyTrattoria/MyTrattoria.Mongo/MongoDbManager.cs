@@ -39,9 +39,15 @@ namespace MyTrattoria.Mongo
 
         public void RimuoviTavolo(string tavoloId, double incassato = 0)
         {
-            var tavolo = tavoli.AsQueryable().First( x => x.Id.Equals(tavoloId) );
-            
-            if(incassato == 0)
+            var tavoli = this.tavoli.AsQueryable().ToList();
+            var tavolo = tavoli.FirstOrDefault(x => x.Id.Equals(tavoloId));
+
+            if( tavolo == null )
+            {
+                return;
+            }
+
+            if (incassato == 0)
             {
                 incassato = tavolo.Ordini
                                   .SelectMany(o => o.Comande.Where(c => c.Stato == StatoComanda.Servita))
@@ -55,20 +61,16 @@ namespace MyTrattoria.Mongo
                 incassi.InsertOne(incasso);
             }
 
-            tavoli.DeleteOne( t => t.Id.Equals(tavoloId) );
+            this.tavoli.DeleteOne( t => t.Id.Equals(tavoloId) );
         }
 
         public Dictionary<string, List<Pietanza>> GetMenu()
         {
-            return this.pietanze.AsQueryable()
-                           .GroupBy(p => p.Tipo)
-                           .ToDictionary(p => p.Key, p => p.ToList());
+            var pietanze = this.pietanze.AsQueryable().ToList();
+            var menu = pietanze.GroupBy( p => p.Tipo, (key, group) => new { tipo = key, pietanze = group.ToList() } )
+                               .ToDictionary(g => g.tipo, g => g.pietanze);
 
-            // TODO: Non funziona Come si deve, restituisce un array vuoto al posto della lista
-            
-            // Nuovo tentativo
-            //var collection = tavoli.Aggregate().Group(new BsonDocument { "_id", "$tipo" }, );
-
+            return menu;
         }
 
         public void Nuova(Pietanza pietanza)
@@ -102,7 +104,7 @@ namespace MyTrattoria.Mongo
 
         private Comanda CreaComanda(string pietanzaId)
         {
-            var pietanza = pietanze.Find(pietanzaId).First();
+            var pietanza = pietanze.AsQueryable().First( p => p.Id == pietanzaId );
             var comanda = new Comanda();
             comanda.Nome = pietanza.Nome;
             comanda.Prezzo = pietanza.Prezzo;
@@ -113,16 +115,37 @@ namespace MyTrattoria.Mongo
 
         public void ModificaStatoComanda(string comandaId, StatoComanda stato)
         {
-            Tavolo tavolo = tavoli.AsQueryable().First(t => t.Ordini.AsQueryable().First(o => o.Comande.AsQueryable().First(c => c.Id.Equals(comandaId)) != null) != null);
+            Tavolo tavolo = this.tavoli.AsQueryable().First(t => t.Ordini.AsQueryable().First(o => o.Comande.AsQueryable().First(c => c.Id.Equals(comandaId)) != null) != null);
             Ordine ordine = tavolo.Ordini.AsQueryable().First(o => o.Comande.AsQueryable().First(c => c.Id.Equals(comandaId)) != null);
             Comanda comanda = ordine.Comande.First(c => c.Id.Equals(comandaId));
-            comanda.Stato = stato;
+
+            // TODO: Under Construction
+            // Versione 2 non funzionante
+
+            //var tavoli = this.tavoli.AsQueryable().ToList();
+            //tavoli.Select(t => t.Ordini)
+            //      .Where(o => o.AsQueryable()
+            //                   .ToList()
+            //                   .Where( or => or.Comande
+            //                                   .AsQueryable()
+            //                                   .ToList()
+            //                                   .Where( c => c.Id.Equals(comandaId) )
+            //                                   .Select( c => new { comanda = c } )
+            //                                   .Count() > 0)
+            //                   .Count > 0
+            //      )
+                  
+            //      .ToDictionary(x => x.id, x => x.comande);
+
+
+
+            //comanda.Stato = stato;
         }
 
         public Dictionary<string, IEnumerable<Comanda>> GetComandeDaPreparare()
         {
-            return tavoli.AsQueryable()
-                  .Select(t => new
+            var tavoli = this.tavoli.AsQueryable().ToList();
+            return tavoli.Select( t => new
                   {
                       id = t.Id,
                       comande = t.Ordini.OrderBy(o => o.DataCreazione)
