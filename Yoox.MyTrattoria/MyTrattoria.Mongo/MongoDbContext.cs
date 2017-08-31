@@ -11,19 +11,5 @@ namespace MyTrattoria.Mongo
 
             return db.GetCollection<T>(collectionName);
         }
-
-
-        //public SqlDbContext()
-        //    : base("name=SqlDbConnectionString")
-        //{
-        //}
-
-        //public virtual DbSet<Pietanza> Pietanze { get; set; }
-        //public virtual DbSet<Incasso> Incassi { get; set; }
-        //public virtual DbSet<Tavolo> Tavoli { get; set; }
-        //public virtual DbSet<Ordine> Ordini { get; set; }
-        //public virtual DbSet<Comanda> Comande { get; set; }
     }
-
-    
 }
