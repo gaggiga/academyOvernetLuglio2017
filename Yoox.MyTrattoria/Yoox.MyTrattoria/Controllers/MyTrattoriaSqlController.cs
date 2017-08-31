@@ -1,17 +1,13 @@
-﻿using MyTrattoria.Sql;
-using MyTrattoria.Sql.Entities;
+﻿using MyTrattoria.Mongo;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Yoox.MyTrattoria.Controllers
 {
     public class MyTrattoriaSqlController : ApiController
     {
-        SqlDbManager db = new SqlDbManager();
+        MongoDbManager db = new MongoDbManager();
 
         public IHttpActionResult CreaTavolo(string sigla)
         {
