@@ -178,35 +178,19 @@ namespace MyTrattoria.Mongo
                            .Select(o => o.Comande
                                          .FirstOrDefault(c => c.Id.Equals(comandaId)) )
                            .FirstOrDefault()
-            });
+            }).FirstOrDefault( v => v.comanda != null );
 
             if (queryResponce == null )
             {
                 return false;
             }
 
-            //queryResponce.FirstOrDefault(c => c.comanda.Id.Equals(comandaId));
-            dynamic queryData = null;
-            foreach (var res in queryResponce)
-            {
-                if( res.comanda != null )
-                {
-                    queryData = res;
-                    break;
-                }
-            }
-
-            if (queryData == null)
-            {
-                return false;
-            }
-
             // Estrazione Dati dalla risposta della query
             Tavolo tavolo = tavoli.Select(t => t)
-                               .Where(t => t.Id == queryData.tavoloId)
+                               .Where(t => t.Id == queryResponce.tavoloId)
                                .First();
-            Ordine ordine = queryData.ordine;
-            Comanda comanda = queryData.comanda;
+            Ordine ordine = queryResponce.ordine;
+            Comanda comanda = queryResponce.comanda;
 
             // Lavoro sullo stato
             comanda.Stato = stato;
