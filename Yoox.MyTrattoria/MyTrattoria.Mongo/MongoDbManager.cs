@@ -186,9 +186,7 @@ namespace MyTrattoria.Mongo
             }
 
             // Estrazione Dati dalla risposta della query
-            Tavolo tavolo = tavoli.Select(t => t)
-                               .Where(t => t.Id == queryResponce.tavoloId)
-                               .First();
+            Tavolo tavolo = tavoli.First(t => t.Id == queryResponce.tavoloId);
             Ordine ordine = queryResponce.ordine;
             Comanda comanda = queryResponce.comanda;
 
