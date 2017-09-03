@@ -34,10 +34,17 @@ namespace MyTrattoria.Mongo
         
         public Tavolo GetTavolo(string id)
         {
-            return tavoli.AsQueryable().First( x => x.Id.Equals(id) );
+            try
+            {
+                return tavoli.AsQueryable().FirstOrDefault(x => x.Id.Equals(id));
+            }
+            catch(FormatException)
+            {
+                return null;
+            }
         }
 
-        public void RimuoviTavolo(string tavoloId, double incassato = 0)
+        public void RimuoviTavolo(string tavoloId, double? incassato)
         {
             var tavoli = this.tavoli.AsQueryable().ToList();
             var tavolo = tavoli.FirstOrDefault(x => x.Id.Equals(tavoloId));
@@ -47,7 +54,7 @@ namespace MyTrattoria.Mongo
                 return;
             }
 
-            if (incassato == 0)
+            if (incassato == null)
             {
                 incassato = tavolo.Ordini
                                   .SelectMany(o => o.Comande.Where(c => c.Stato == StatoComanda.Servita))
@@ -57,7 +64,7 @@ namespace MyTrattoria.Mongo
             if(incassato > 0)
             {
                 var incasso = new Incasso();
-                incasso.Totale = incassato;
+                incasso.Totale = (double)incassato;
                 incassi.InsertOne(incasso);
             }
 
@@ -73,19 +80,54 @@ namespace MyTrattoria.Mongo
             return menu;
         }
 
-        public void Nuova(Pietanza pietanza)
+        public void NuovaPietanza(string nome, string tipo, double prezzo)
         {
+            var pietanza = new Pietanza();
+            pietanza.Nome = nome;
+            pietanza.Tipo = tipo;
+            pietanza.Prezzo = prezzo;
+
             pietanze.InsertOne(pietanza);
         }
 
-        public void Modifica(Pietanza pietanza)
+        public bool ModificaPietanza(string pietanzaId, string nome, string tipo, double prezzo)
         {
-            pietanze.ReplaceOne( p => p.Id.Equals( pietanza.Id ), pietanza );
-        }
+            Pietanza pietanza;
+            try
+            {
+                var pietanze = this.pietanze.AsQueryable().ToList();
+                pietanza = pietanze.FirstOrDefault(p => p.Id.Equals(pietanzaId));
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
 
-        public void EliminaPietanza(string pietanzaId)
+            if (pietanza == null)
+            {
+                return false;
+            }
+            
+            pietanza.Nome = nome;
+            pietanza.Tipo = tipo;
+            pietanza.Prezzo = prezzo;
+
+            this.pietanze.ReplaceOne( p => p.Id.Equals(pietanzaId), pietanza );
+
+            return true;
+        }
+        
+        public bool EliminaPietanza(string pietanzaId)
         {
-            pietanze.DeleteOne( p => p.Id.Equals(pietanzaId) );
+            try
+            {
+                pietanze.DeleteOne(p => p.Id.Equals(pietanzaId));
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            return true;
         }
 
         public Ordine CreaOrdine(string tavoloId, string[] pietanzeId)
@@ -113,33 +155,76 @@ namespace MyTrattoria.Mongo
             return comanda;
         }
 
-        public void ModificaStatoComanda(string comandaId, StatoComanda stato)
+        public bool ModificaStatoComanda(string comandaId, StatoComanda stato)
         {
-            Tavolo tavolo = this.tavoli.AsQueryable().First(t => t.Ordini.AsQueryable().First(o => o.Comande.AsQueryable().First(c => c.Id.Equals(comandaId)) != null) != null);
-            Ordine ordine = tavolo.Ordini.AsQueryable().First(o => o.Comande.AsQueryable().First(c => c.Id.Equals(comandaId)) != null);
-            Comanda comanda = ordine.Comande.First(c => c.Id.Equals(comandaId));
+            if (!Guid.TryParse(comandaId, out var guid))
+            {
+                return false;
+            }
 
-            // TODO: Under Construction
-            // Versione 2 non funzionante
+            // Ricerca comanda su cui eseguire l'operazione
+            var tavoli = this.tavoli.AsQueryable().ToList();
+            var queryResponce = tavoli.Select(t => new
+            {
+                tavoloId = t.Id,
+                ordine = t.Ordini
+                          .Where(o => o.Comande
+                                       .Where(c => c.Id.Equals(comandaId)).Count() > 0 )
+                          .FirstOrDefault(),
 
-            //var tavoli = this.tavoli.AsQueryable().ToList();
-            //tavoli.Select(t => t.Ordini)
-            //      .Where(o => o.AsQueryable()
-            //                   .ToList()
-            //                   .Where( or => or.Comande
-            //                                   .AsQueryable()
-            //                                   .ToList()
-            //                                   .Where( c => c.Id.Equals(comandaId) )
-            //                                   .Select( c => new { comanda = c } )
-            //                                   .Count() > 0)
-            //                   .Count > 0
-            //      )
-                  
-            //      .ToDictionary(x => x.id, x => x.comande);
+                comanda = t.Ordini
+                           .Where(o => o.Comande
+                                       .Where(c => c.Id.Equals(comandaId)).Count() > 0)
+                           .Select(o => o.Comande
+                                         .FirstOrDefault(c => c.Id.Equals(comandaId)) )
+                           .FirstOrDefault()
+            });
 
+            if (queryResponce == null )
+            {
+                return false;
+            }
 
+            //queryResponce.FirstOrDefault(c => c.comanda.Id.Equals(comandaId));
+            dynamic queryData = null;
+            foreach (var res in queryResponce)
+            {
+                if( res.comanda != null )
+                {
+                    queryData = res;
+                    break;
+                }
+            }
 
-            //comanda.Stato = stato;
+            if (queryData == null)
+            {
+                return false;
+            }
+
+            // Estrazione Dati dalla risposta della query
+            Tavolo tavolo = tavoli.Select(t => t)
+                               .Where(t => t.Id == queryData.tavoloId)
+                               .First();
+            Ordine ordine = queryData.ordine;
+            Comanda comanda = queryData.comanda;
+
+            // Lavoro sullo stato
+            comanda.Stato = stato;
+
+            // Preparazione oggetto da caricare nel database
+            var oldComanda = ordine.Comande.FirstOrDefault(c => c.Id.Equals(comanda.Id));
+            ordine.Comande.Remove(oldComanda);
+            ordine.Comande.Add(comanda);
+
+            var oldOrdine = tavolo.Ordini.FirstOrDefault(o => o.Id.Equals(ordine.Id));
+            tavolo.Ordini.Remove(oldOrdine);
+            tavolo.Ordini.Add(ordine);
+
+            // Caricamento oggetto modificato nel database
+            this.tavoli.ReplaceOne(t => t.Id.Equals(tavolo.Id), tavolo);
+
+            return true;
+
         }
 
         public Dictionary<string, IEnumerable<Comanda>> GetComandeDaPreparare()
@@ -155,19 +240,19 @@ namespace MyTrattoria.Mongo
                   .ToDictionary(x => x.id, x => x.comande);
         }
 
-        public void ComandaPronta(string comandaId)
+        public bool ComandaPronta(string comandaId)
         {
-            ModificaStatoComanda(comandaId, StatoComanda.DaServire);
+            return ModificaStatoComanda(comandaId, StatoComanda.DaServire);
         }
 
-        public void ComandaServita(string comandaId)
+        public bool ComandaServita(string comandaId)
         {
-            ModificaStatoComanda(comandaId, StatoComanda.Servita);
+            return ModificaStatoComanda(comandaId, StatoComanda.Servita);
         }
 
-        public void ComandaAnnullata(string comandaId)
+        public bool ComandaAnnullata(string comandaId)
         {
-            ModificaStatoComanda(comandaId, StatoComanda.Annullata);
+            return ModificaStatoComanda(comandaId, StatoComanda.Annullata);
         }
 
     }

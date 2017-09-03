@@ -1,5 +1,4 @@
 ﻿using MyTrattoria.Mongo;
-using MyTrattoria.Mongo.Entities;
 using System;
 using System.Linq;
 using System.Web.Http;
@@ -10,7 +9,8 @@ namespace Yoox.MyTrattoria.Controllers
     {
         MongoDbManager dbManager = new MongoDbManager();
 
-        public IHttpActionResult CreaTavolo(string sigla)
+        [HttpPost]
+        public IHttpActionResult CreateTavolo(string sigla)
         {
             if (String.IsNullOrEmpty(sigla))
             {
@@ -27,78 +27,121 @@ namespace Yoox.MyTrattoria.Controllers
             return Ok(new { id = tavolo.Id });
         }
 
-        public IHttpActionResult ElencoTavoli()
+        [HttpGet]
+        public IHttpActionResult GetElencoTavoli()
         {
             var tavoli = dbManager.GetTavoli().Select(t => new { id = t.Id, sigla = t.Sigla, stato = t.Stato });
             return Ok(tavoli);
         }
 
-        public IHttpActionResult RimuoviTavolo(string tavoloId)
+        [HttpGet]
+        public IHttpActionResult GetTavolo(string tavoloId)
         {
-            dbManager.RimuoviTavolo(tavoloId);
+            var tavolo = dbManager.GetTavolo(tavoloId);
+
+            if (tavolo != null)
+            {
+                return Ok(tavolo);
+            }
+            return BadRequest("Id Tavolo Errato");
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteTavolo(string tavoloId)
+        {
+            dbManager.RimuoviTavolo(tavoloId, null);
             return Ok();
         }
 
-        public IHttpActionResult CreaOrdine(string tavoloId, string[] pietanzeID)
+        [HttpPost]
+        public IHttpActionResult CreateOrdine(string tavoloId, string[] pietanzeID)
         {
             var ordine = dbManager.CreaOrdine(tavoloId, pietanzeID);
 
             return Ok(new { dataCreazione = ordine.DataCreazione });
         }
 
-        public IHttpActionResult Menu()
+        [HttpGet]
+        public IHttpActionResult GetMenu()
         {
             return Ok(dbManager.GetMenu());
         }
 
+        [HttpPut]
         public IHttpActionResult AnnullaComanda(string comandaId)
         {
-            dbManager.ComandaAnnullata(comandaId);
+            var inserted = dbManager.ComandaAnnullata(comandaId);
 
-            return Ok();
+            if (inserted)
+            {
+                return Ok();
+            }
+            return BadRequest("Id errato");
         }
 
+        [HttpPut]
         public IHttpActionResult ServiComanda(string comandaId)
         {
-            dbManager.ComandaServita(comandaId);
+            var inserted = dbManager.ComandaServita(comandaId);
 
-            return Ok();
+            if (inserted)
+            {
+                return Ok();
+            }
+            return BadRequest("Id errato");
         }
 
+        [HttpPut]
         public IHttpActionResult ProntaComanda(string comandaId)
         {
-            dbManager.ComandaPronta(comandaId);
+            var inserted = dbManager.ComandaPronta(comandaId);
 
-            return Ok();
+            if (inserted)
+            {
+                return Ok();
+            }
+            return BadRequest("Id errato");
         }
-        public IHttpActionResult Incassa(string tavoloId, double incasso)
+
+        [HttpGet]
+        public IHttpActionResult GetComandeDaPreparare()
+        {
+            return Ok(dbManager.GetComandeDaPreparare());
+        }
+
+        [HttpPost]
+        public IHttpActionResult Incassa(string tavoloId, double? incasso = null)
         {
             dbManager.RimuoviTavolo(tavoloId, incasso);
             return Ok();
         }
-
-        public IHttpActionResult GetTavolo(string tavoloId)
-        {
-            var tavolo = dbManager.GetTavolo(tavoloId);
-
-            return Ok(tavolo);
-        }
-
-
+        
+        [HttpPost]
         public IHttpActionResult AddPietanza(string nome, string tipo, double prezzo)
         {
-            var pietanza = new Pietanza();
-            pietanza.Nome = nome;
-            pietanza.Tipo = tipo;
-            pietanza.Prezzo = prezzo;
-            dbManager.Nuova(pietanza);
+            dbManager.NuovaPietanza(nome, tipo, prezzo);
 
             return Ok();
         }
 
-        public IHttpActionResult GetComandeDaPreparare()
+        [HttpPut]
+        public IHttpActionResult ModificaPietanza(string pietanzaId, string nome, string tipo, double prezzo)
         {
-            return Ok(dbManager.GetComandeDaPreparare());
+            if (dbManager.ModificaPietanza(pietanzaId, nome, tipo, prezzo))
+            {
+                return Ok();
+            }
+            return BadRequest("Id Tavolo Errato");
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeletePietanza(string pietanzaId)
+        {
+            if (dbManager.EliminaPietanza(pietanzaId))
+            {
+                return Ok();
+            }
+            return BadRequest("Id Tavolo Errato");
         }
     }
 }
