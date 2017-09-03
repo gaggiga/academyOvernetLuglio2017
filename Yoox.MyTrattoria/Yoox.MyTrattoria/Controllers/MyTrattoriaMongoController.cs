@@ -53,6 +53,12 @@ namespace Yoox.MyTrattoria.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public IHttpActionResult GetMenu()
+        {
+            return Ok(dbManager.GetMenu());
+        }
+
         [HttpPost]
         public IHttpActionResult CreateOrdine(string tavoloId, string[] pietanzeID)
         {
@@ -60,13 +66,7 @@ namespace Yoox.MyTrattoria.Controllers
 
             return Ok(new { dataCreazione = ordine.DataCreazione });
         }
-
-        [HttpGet]
-        public IHttpActionResult GetMenu()
-        {
-            return Ok(dbManager.GetMenu());
-        }
-
+        
         [HttpPut]
         public IHttpActionResult AnnullaComanda(string comandaId)
         {

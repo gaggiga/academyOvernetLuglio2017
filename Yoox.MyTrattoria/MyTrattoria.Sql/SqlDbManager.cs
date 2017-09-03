@@ -64,14 +64,24 @@ namespace MyTrattoria.Sql
             return db.Pietanze.GroupBy(p => p.Tipo).ToDictionary(p => p.Key, p => p.AsEnumerable());
         }
 
-        public void Nuova(Pietanza pietanza)
+        public void NuovaPietanza(string nome, string tipo, decimal prezzo)
         {
+            var pietanza = new Pietanza();
+            pietanza.Nome = nome;
+            pietanza.Tipo = tipo;
+            pietanza.Prezzo = prezzo;
+
             db.Pietanze.Add(pietanza);
             db.SaveChanges();
         }
 
-        public void Modifica(Pietanza pietanza)
+        public void ModificaPietanza(int pietanzaId, string nome, string tipo, decimal prezzo)
         {
+            var pietanza = db.Pietanze.FirstOrDefault(p => p.Id == pietanzaId);
+            pietanza.Nome = nome;
+            pietanza.Tipo = tipo;
+            pietanza.Prezzo = prezzo;
+
             db.Entry(pietanza).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
         }
