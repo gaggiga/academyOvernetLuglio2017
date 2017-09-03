@@ -178,7 +178,7 @@ namespace MyTrattoria.Mongo
                            .Select(o => o.Comande
                                          .FirstOrDefault(c => c.Id.Equals(comandaId)) )
                            .FirstOrDefault()
-            }).FirstOrDefault( v => v.comanda != null );
+            }).FirstOrDefault( qr => qr.comanda != null );
 
             if (queryResponce == null )
             {
