@@ -9,64 +9,22 @@ using System.Threading.Tasks;
 namespace Yoox.CampoCalcolato
 {
     [Table("RigheOrdine")]
-    public class RigaOrdine
+    public class RigaOrdine : INeedToCalculateSomething
     {
-        private decimal? totaleRiga = null;
-        private decimal prezzo { get; set; }
-        internal static readonly Expression<Func<RigaOrdine, decimal>> PrezzoExpression = p => p.prezzo;
-
-        private int quantità { get; set; }
-        internal static readonly Expression<Func<RigaOrdine, int>> QuantitàExpression = p => p.quantità;
-
-        private decimal sconto { get; set; }
-        internal static readonly Expression<Func<RigaOrdine, decimal>> ScontoExpression = p => p.sconto;
-
         public int Id { get; set; }
         public string Descrizione { get; set; }
 
-        [NotMapped]
-        public decimal Prezzo
-        {
-            get { return prezzo; }
-            set { prezzo = value; RicalcolaTotaleRiga(); }
-        }
+        public decimal Prezzo { get; set; }
 
-        [NotMapped]
-        public int Quantità
-        {
-            get { return quantità; }
-            set { quantità = value; RicalcolaTotaleRiga(); }
-        }
+        public int Quantità { get; set; }
 
+        public decimal Sconto { get; set; }
 
-        [NotMapped]
-        public decimal Sconto
-        {
-            get { return sconto; }
-            set { sconto = value; RicalcolaTotaleRiga(); }
-        }
-        
-        public decimal TotaleRiga
-        {
-            get
-            {
-                if(totaleRiga == null)
-                {
-                    RicalcolaTotaleRiga();
-                }
-
-                return totaleRiga.Value;
-            }
-
-            set
-            {
-                this.totaleRiga = value;
-            }
-        }
+        public decimal TotaleRiga { get; set; }
 
         public Ordine Ordine { get; set; }
 
-        private void RicalcolaTotaleRiga()
+        public void CalculateIt()
         {
             Console.WriteLine("RigaOrdine: Chiamato calcola totale");
             this.TotaleRiga = this.Quantità * this.Prezzo - this.Sconto;

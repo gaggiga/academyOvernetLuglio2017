@@ -11,20 +11,6 @@ namespace Yoox.CampoCalcolato
         {
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<RigaOrdine>()
-                .Property(RigaOrdine.Quantit‡Expression).HasColumnName("Quantit‡");
-
-            modelBuilder.Entity<RigaOrdine>()
-                .Property(RigaOrdine.PrezzoExpression).HasColumnName("Prezzo");
-
-            modelBuilder.Entity<RigaOrdine>()
-                .Property(RigaOrdine.ScontoExpression).HasColumnName("Sconto");
-        }
-
         public override int SaveChanges()
         {
             var selectedEntityList = ChangeTracker.Entries()
