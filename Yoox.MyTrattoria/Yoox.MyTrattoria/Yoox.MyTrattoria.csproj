@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\MyTrattoriaMongoController.cs" />
     <Compile Include="Controllers\MyTrattoriaSqlController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -124,12 +124,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\MyTrattoria.Mongo\MyTrattoria.Mongo.csproj">
+      <Project>{13dbb87e-f822-4114-92c2-71d848ca7aee}</Project>
+      <Name>MyTrattoria.Mongo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyTrattoria.Sql\MyTrattoria.Sql.csproj">
-      <Project>{469202e8-2350-4e13-89bf-1b701595ead9}</Project>
+      <Project>{469202E8-2350-4E13-89BF-1B701595EAD9}</Project>
       <Name>MyTrattoria.Sql</Name>
     </ProjectReference>
   </ItemGroup>
