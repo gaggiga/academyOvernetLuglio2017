@@ -61,5 +61,55 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(3, sck.Add("//;\n1;2"));
             Assert.AreEqual(6, sck.Add("//-\n1-2-3")); 
         }
+
+        [TestMethod]
+        public void Add_Should_IgnoreNegativeNumbers()
+        {
+            int result = 0;
+            try
+            {
+                result = sck.Add("-1");
+                Assert.Fail("Non scatenata eccezione");
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Assert.AreEqual("negatives not allowed: -1", e.Message);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Tipo non corretto");
+            }
+
+            try
+            {
+                result = sck.Add("-1,-3");
+                Assert.Fail("Non scatenata eccezione");
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Assert.AreEqual("negatives not allowed: -1,-3", e.Message);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Tipo non corretto"); 
+            }
+
+        }
+
+        [TestMethod]
+        public void Add_Should_IgnoreNumbersBiggerThan1000()
+        {
+            
+            Assert.AreEqual(2, sck.Add("2,1001"));
+            Assert.AreEqual(4, sck.Add("1,1002,3,4005"));
+        }
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsDelimitersOfDifferentLenght()
+        {
+
+            Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
+            Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
+        }
     }
 }
