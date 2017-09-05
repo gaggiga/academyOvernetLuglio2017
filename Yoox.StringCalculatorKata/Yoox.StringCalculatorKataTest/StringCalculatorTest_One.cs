@@ -48,20 +48,11 @@ namespace Yoox.StringCalculatorKataTestOne
         }
 
         [TestMethod]
-        public void Add_Should_SupportAlsoNewlineCharAsDelimiter()
+        public void Add_Should_SupportNewlineSeparator()
         {
             Assert.AreEqual(3, sck.Add("1\n2"));
             Assert.AreEqual(157, sck.Add("145\n12"));
             Assert.AreEqual(1206, sck.Add("347\n819,3,22\n15"));
-        }
-
-        [TestMethod]
-        public void Add_Should_SupportDifferentDelimiters()
-        {
-            Assert.AreEqual(3, sck.Add("//;\n1;2"));
-            Assert.AreEqual(157, sck.Add("//-\n145-12"));
-            Assert.AreEqual(157, sck.Add("//\n\n145\n12"));
-            Assert.AreEqual(1206, sck.Add("//:\n347:819:3:22:15"));
         }
     }
 }
