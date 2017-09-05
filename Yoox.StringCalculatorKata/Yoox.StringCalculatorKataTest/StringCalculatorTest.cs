@@ -38,5 +38,20 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(157, sck.Add("145,12"));
             Assert.AreEqual(1166, sck.Add("347,819"));
         }
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsMoreThenTwoNumbers()
+        {
+            Assert.AreEqual(158, sck.Add("145,12,1"));
+            Assert.AreEqual(1171, sck.Add("347,819,4,1"));
+        }
+
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsNewLine()
+        {
+            Assert.AreEqual(158, sck.Add("145,12\n1"));
+            Assert.AreEqual(1171, sck.Add("347\n819,4,1"));
+        }
     }
 }
