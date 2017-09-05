@@ -63,5 +63,45 @@ namespace Yoox.StringCalculatorKataTestOne
             Assert.AreEqual(157, sck.Add("//\n\n145\n12"));
             Assert.AreEqual(1206, sck.Add("//:\n347:819:3:22:15"));
         }
+
+        [TestMethod]
+        public void Add_Should_ThrowException_When_NegativesNumbers()
+        {
+            CheckIfThereAreNegativeNumbers("-1", "-1");
+            CheckIfThereAreNegativeNumbers("1,-2", "-2");
+            CheckIfThereAreNegativeNumbers("35\n-1,3", "-1");
+        }
+
+        [TestMethod]
+        public void Add_Should_IgnoringNumbersGreaterThanThousand()
+        {
+            Assert.AreEqual(3, sck.Add("1,2000,2"));
+            Assert.AreEqual(157, sck.Add("145,12,1200"));
+        }
+
+        //[TestMethod]
+        //public void Add_Should_ThrowException_When_NegativesNumbers_And_DashCharAsDelimiter()
+        //{
+        //    StringInInput("//-\n1-2--4", "-4");
+        //    StringInInput("//-\n1--2--4", "-2");
+        //    StringInInput("//-\n1-2--99-109", "-99");
+        //}
+
+        private void CheckIfThereAreNegativeNumbers(string numbers, string negativeNumber)
+        {
+            try
+            {
+                sck.Add(numbers);
+                Assert.Fail("Non è stata scatenata alcuna eccezione");
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Assert.AreEqual("Negatives not allowed: " + negativeNumber, e.Message);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Tipo eccezione non corretto");
+            }
+        }
     }
 }

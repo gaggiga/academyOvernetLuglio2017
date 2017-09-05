@@ -15,22 +15,33 @@ namespace Yoox.StringCalculatorKataOne
                 return 0;
             }
 
-            var delimiters = new List<Char>();
-            char delimiter = ',';
+            var delimiters = new char[] { ',', '\n' };
 
-            if(numbers.StartsWith("//"))
+            if (numbers.StartsWith("//"))
             {
-                delimiter = numbers[2];
+                delimiters = new char[] { numbers[2] };
                 numbers = numbers.Substring(4);
             }
-            else
+
+            var result = 0;
+            foreach(var number in numbers.Split(delimiters))
             {
-                delimiters.Add('\n');
+                var n = Int32.Parse(number);
+
+                if(n < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Negatives not allowed: " + number, null as Exception);
+                }
+                
+                if(n > 1000)
+                {
+                    continue;
+                }
+
+                result += n;
             }
 
-            delimiters.Add(delimiter);
-
-            return numbers.Split(delimiters.ToArray()).Sum(s => Int32.Parse(s));
+            return result;
         }
     }
 }
