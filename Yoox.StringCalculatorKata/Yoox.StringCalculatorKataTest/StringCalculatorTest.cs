@@ -34,9 +34,9 @@ namespace Yoox.StringCalculatorKataTest
         [TestMethod]
         public void Add_Should_ReturnTheSum_When_NumbersContainsTwoNumbers()
         {
-            Assert.AreEqual(3, "1,2");
-            Assert.AreEqual(157, "145,12");
-            Assert.AreEqual(1166, "347,819");
+            Assert.AreEqual(3, sck.Add("1,2"));
+            Assert.AreEqual(157, sck.Add("145,12"));
+            Assert.AreEqual(1166, sck.Add("347,819"));
         }
     }
 }
