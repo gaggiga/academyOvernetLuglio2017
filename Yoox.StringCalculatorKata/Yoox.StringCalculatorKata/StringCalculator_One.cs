@@ -15,7 +15,9 @@ namespace Yoox.StringCalculatorKataOne
                 return 0;
             }
 
-            return numbers.Split(',', '\n').Sum(s => Int32.Parse(s));
+            char[] delimiters = new char[] { ',', '\n' };
+
+            return numbers.Split(delimiters).Sum(s => Int32.Parse(s));
         }
     }
 }
