@@ -80,6 +80,14 @@ namespace Yoox.StringCalculatorKataTestOne
         }
 
         //[TestMethod]
+        //public void Add_Should_SupportAnyDelimiterLength()
+        //{
+        //    Assert.AreEqual(3, sck.Add("//delimiter\n1delimiter2delimiter3"));
+        //    Assert.AreEqual(157, sck.Add("//[-]\n145[-]12"));
+        //    Assert.AreEqual(157, sck.Add("// - \n145 - 12"));
+        //}
+
+        //[TestMethod]
         //public void Add_Should_ThrowException_When_NegativesNumbers_And_DashCharAsDelimiter()
         //{
         //    StringInInput("//-\n1-2--4", "-4");
