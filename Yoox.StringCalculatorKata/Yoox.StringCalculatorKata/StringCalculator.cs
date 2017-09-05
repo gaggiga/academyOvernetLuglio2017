@@ -11,7 +11,7 @@ namespace Yoox.StringCalculatorKata
         public int Add(string numbers)
         {
             if (String.IsNullOrEmpty(numbers)) return 0;
-            var result = numbers.Split(',').Sum(s => Int32.Parse(s));
+            var result = numbers.Split(',','\n').Sum(s => Int32.Parse(s));
             return result;
         }
     }
