@@ -91,7 +91,7 @@ namespace Yoox.StringCalculatorKataTest
             }
             catch (Exception e)
             {
-                Assert.Fail("Tipo non corretto");
+                Assert.Fail("Tipo non corretto"); 
             }
 
         }

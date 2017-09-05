@@ -12,7 +12,7 @@ namespace Yoox.StringCalculatorKata
         {
             if (String.IsNullOrEmpty(numbers)) return 0;
 
-            var delimiters = new char[] { ',', '\n' };
+            var delimiters = new char[] { ',', '\n' }; 
 
             if (numbers.StartsWith("//"))
             {
