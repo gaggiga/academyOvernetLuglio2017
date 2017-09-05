@@ -7,43 +7,51 @@ namespace Yoox.StringCalculatorKataTest
     [TestClass]
     public class StringCalculatorTest_Belli
     {
-        StringCalculator sck = new StringCalculator();
+        StringCalculator_Belli sck;
 
+        public StringCalculatorTest_Belli()
+        {
+            sck = new StringCalculator_Belli();
+        }
 
         [TestMethod]
-        public void TestEmptyString()
+        public void Add_Should_ReturnZero_When_NumbersIsEmpty()
         {
             Assert.AreEqual(0, sck.Add(""));
         }
 
         [TestMethod]
-        public void TestZero()
+        public void Add_Should_ReturnTheNumber_When_NumbersContainsSingleNumber()
         {
-            Assert.AreEqual(0, sck.Add("0"));
+            var input = new string[] { "0", "1", "255" };
+
+            foreach (var i in input)
+            {
+                Assert.AreEqual(Int32.Parse(i), sck.Add(i));
+            }
         }
 
         [TestMethod]
-        public void TestOne()
-        {
-            Assert.AreEqual(1, sck.Add("1"));
-        }
-
-        [TestMethod]
-        public void TestOnePlusTwo()
+        public void Add_Should_ReturnTheSum_When_NumbersContainsTwoNumbers()
         {
             Assert.AreEqual(3, sck.Add("1,2"));
-        }
-
-        [TestMethod]
-        public void TestTwoRandomNumber1()
-        {
             Assert.AreEqual(157, sck.Add("145,12"));
+            Assert.AreEqual(1166, sck.Add("347,819"));
         }
 
         [TestMethod]
-        public void TestTwoRandomNumber2()
+        public void Add_Should_ReturnTheSum_When_NumbersContainsMoreThenTwoNumbers()
         {
-            Assert.AreEqual(1166, sck.Add("347,819"));
+            Assert.AreEqual(158, sck.Add("145,12,1"));
+            Assert.AreEqual(1171, sck.Add("347,819,4,1"));
+        }
+
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsNewLine()
+        {
+            Assert.AreEqual(10, sck.Add("1,2\n3,4"));
+            Assert.AreEqual(6, sck.Add("1\n2,3"));
         }
     }
 }

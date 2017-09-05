@@ -40,7 +40,7 @@ namespace Yoox.StringCalculatorKataTest
         }
 
         [TestMethod]
-        public void Add_Should_ReturnTheSum_When_NumbersContainsMoreThenTwoNumbers()
+        public void Add_Should_ReturnTheSum_When_NumbersContainsMoreThanTwoNumbers()
         {
             Assert.AreEqual(158, sck.Add("145,12,1"));
             Assert.AreEqual(1171, sck.Add("347,819,4,1"));
@@ -48,7 +48,7 @@ namespace Yoox.StringCalculatorKataTest
 
 
         [TestMethod]
-        public void Add_Should_ReturnTheSum_When_NumbersContainsNewLine()
+        public void Add_Should_SupportAlsoNewlineCharAsNumbersDelimeter()
         {
             Assert.AreEqual(10, sck.Add("1,2\n3,4"));
             Assert.AreEqual(6, sck.Add("1\n2,3"));

@@ -10,22 +10,9 @@ namespace Yoox.StringCalculatorKata
     {
         public int Add(string numbers)
         {
-
-            if (numbers.Equals(String.Empty))
-            {
-                return 0;
-            }
-
-            else if (numbers.Contains(","))
-            {
-                string[] array = new string[2];
-
-                array = numbers.Split(',');
-
-                return Int32.Parse(array[0]) + Int32.Parse(array[1]);
-            }
-
-            return Int32.Parse(numbers);
+            if (String.IsNullOrEmpty(numbers)) return 0;
+            var result = numbers.Split(',', '\n').Sum(s => Int32.Parse(s));
+            return result;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace Yoox.StringCalculatorKataTestOne
         }
 
         [TestMethod]
-        public void Add_Should_SupportNewlineSeparator()
+        public void Add_Should_SupportAlsoNewlineCharAsNumbersDelimeter()
         {
             Assert.AreEqual(3, sck.Add("1\n2"));
             Assert.AreEqual(157, sck.Add("145\n12"));
