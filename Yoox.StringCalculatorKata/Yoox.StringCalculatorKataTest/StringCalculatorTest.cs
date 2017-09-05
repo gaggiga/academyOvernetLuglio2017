@@ -80,7 +80,7 @@ namespace Yoox.StringCalculatorKataTest
         }
 
         [TestMethod]
-        public void Add_Should_ThrowException_When_ThereAreNegativesNumbersWithMinusDelimiter()
+        public void Add_Should_ThrowException_When_ThereAreNegativesNumbersWithDashDelimiter()
         {
             var exc = AssertExtensions.Throws<ArgumentOutOfRangeException>(() => sck.Add("//-\n1--4-3"));
             Assert.AreEqual("Negatives not allowed: -4", exc.Message);
