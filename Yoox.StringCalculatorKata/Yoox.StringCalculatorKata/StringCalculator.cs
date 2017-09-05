@@ -11,8 +11,16 @@ namespace Yoox.StringCalculatorKata
         public int Add(string numbers)
         {
             if (String.IsNullOrEmpty(numbers)) return 0;
-            var result = numbers.Split(',','\n').Sum(s => Int32.Parse(s));
-            return result;
+
+            var delimiters = new char[] { ',', '\n' };
+
+            if (numbers.StartsWith("//"))
+            {
+                delimiters = new char[] { numbers[2] };
+                numbers = numbers.Substring(4);
+            }
+
+            return numbers.Split(delimiters).Sum(s => Int32.Parse(s));
         }
     }
 }

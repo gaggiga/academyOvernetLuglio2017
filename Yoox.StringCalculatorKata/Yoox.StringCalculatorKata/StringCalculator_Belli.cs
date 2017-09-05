@@ -12,7 +12,8 @@ namespace Yoox.StringCalculatorKata
         {
             if (String.IsNullOrEmpty(numbers)) return 0;
 
-            if (numbers.StartsWith("//")) return numbers.Substring(4).Split(numbers[2]).Sum(s => Int32.Parse(s));
+            if (numbers.StartsWith("//"))
+                return numbers.Substring(4).Split(numbers[2]).Sum(s => Int32.Parse(s));
             
             return numbers.Split(',','\n').Sum(s => Int32.Parse(s)); 
         }
