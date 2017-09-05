@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Yoox.StringCalculatorKataOne
@@ -15,9 +16,33 @@ namespace Yoox.StringCalculatorKataOne
                 return 0;
             }
 
-            char[] delimiters = new char[] { ',', '\n' };
+            var delimiters = new char[] { ',', '\n' };
 
-            return numbers.Split(delimiters).Sum(s => Int32.Parse(s));
+            if (numbers.StartsWith("//"))
+            {
+                delimiters = new char[] { numbers[2] };
+                numbers = numbers.Substring(4);
+            }
+
+            var result = 0;
+            foreach (var number in numbers.Split(delimiters, StringSplitOptions.None))
+            {
+                var n = Int32.Parse(number);
+
+                if (n < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Negatives not allowed: " + number, null as Exception);
+                }
+
+                if (n > 1000)
+                {
+                    continue;
+                }
+
+                result += n;
+            }
+
+            return result;
         }
     }
 }

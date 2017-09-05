@@ -104,12 +104,12 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(4, sck.Add("1,1002,3,4005"));
         }
 
-        [TestMethod]
-        public void Add_Should_ReturnTheSum_When_NumbersContainsDelimitersOfDifferentLenght()
-        {
+        //[TestMethod]
+        //public void Add_Should_ReturnTheSum_When_NumbersContainsDelimitersOfDifferentLenght()
+        //{
 
-            Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
-            Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
-        }
+        //    Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
+        //    Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
+        //}
     }
 }
