@@ -25,7 +25,7 @@ namespace Yoox.StringCalculatorKataOne
             }
 
             var result = 0;
-            foreach (var number in numbers.Split(delimiters, StringSplitOptions.None))
+            foreach (var number in numbers.Split(delimiters))
             {
                 var n = Int32.Parse(number);
 
