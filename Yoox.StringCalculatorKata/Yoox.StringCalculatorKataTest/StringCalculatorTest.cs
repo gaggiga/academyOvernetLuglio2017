@@ -94,5 +94,12 @@ namespace Yoox.StringCalculatorKataTest
             exc = AssertExtensions.Throws<ArgumentOutOfRangeException>(() => sck.Add("//-\n-1-2--42-3--23"));
             Assert.AreEqual("Negatives not allowed: -1,-42,-23", exc.Message);
         }
+
+        [TestMethod]
+        public void Add_Should_IgnoreNumbersGreaterThanThousand()
+        {
+            Assert.AreEqual(158, sck.Add("145,12,1234,1"));
+            Assert.AreEqual(1171, sck.Add("347,2000,819,4,1"));
+        }
     }
 }

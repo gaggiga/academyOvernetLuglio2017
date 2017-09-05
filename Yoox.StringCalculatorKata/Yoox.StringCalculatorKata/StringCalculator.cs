@@ -38,7 +38,7 @@ namespace Yoox.StringCalculatorKata
                 throw new ArgumentOutOfRangeException("Negatives not allowed: " + list, null as Exception);
             }
 
-            return values.Sum();
+            return values.Where(v => v <= 1000).Sum();
         }
 
         private string ReplaceDash(string numbers, char delimiter)
