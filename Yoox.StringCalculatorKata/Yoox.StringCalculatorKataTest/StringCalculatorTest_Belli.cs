@@ -53,5 +53,13 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(10, sck.Add("1,2\n3,4"));
             Assert.AreEqual(6, sck.Add("1\n2,3"));
         }
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsDifferentTypeOfDelimeters()
+        {
+           
+            Assert.AreEqual(3, sck.Add("//;\n1;2"));
+            Assert.AreEqual(6, sck.Add("//-\n1-2-3")); 
+        }
     }
 }
