@@ -60,6 +60,7 @@ namespace Yoox.StringCalculatorKataTestOne
         {
             Assert.AreEqual(3, sck.Add("//;\n1;2"));
             Assert.AreEqual(157, sck.Add("//-\n145-12"));
+            Assert.AreEqual(157, sck.Add("//\n\n145\n12"));
             Assert.AreEqual(1206, sck.Add("//:\n347:819:3:22:15"));
         }
     }
