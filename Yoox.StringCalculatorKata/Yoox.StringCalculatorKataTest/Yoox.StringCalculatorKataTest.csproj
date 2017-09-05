@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AssertExtensions.cs" />
     <Compile Include="StringCalculatorTest.cs" />
     <Compile Include="StringCalculatorTest_Belli.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
