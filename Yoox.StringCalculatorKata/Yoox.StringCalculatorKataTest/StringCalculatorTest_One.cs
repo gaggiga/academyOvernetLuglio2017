@@ -1,29 +1,58 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Yoox.StringCalculatorKata;
-using System.Collections.Generic;
+using Yoox.StringCalculatorKataOne;
 
-namespace Yoox.StringCalculatorKataTest
+namespace Yoox.StringCalculatorKataTestOne
 {
     [TestClass]
-    public class StringCalculatorTest_One
+    public class StringCalculatorTest
     {
-        private StringCalculator calculator;
+        StringCalculator sck;
 
-        public StringCalculatorTest_One()
+        public StringCalculatorTest()
         {
-            calculator = new StringCalculator();
+            sck = new StringCalculator();
         }
 
         [TestMethod]
-        public void ShouldPrintAdd()
+        public void Add_Should_ReturnZero_When_NumbersIsEmpty()
         {
-            var stringOfNumbers = new List<string>() { "", "1", "1,2", "10,11" };
+            Assert.AreEqual(0, sck.Add(""));
+        }
 
-            Assert.AreEqual(0, calculator.Add(stringOfNumbers[0]));
-            Assert.AreEqual(1, calculator.Add(stringOfNumbers[1]));
-            Assert.AreEqual(3, calculator.Add(stringOfNumbers[2]));
-            Assert.AreEqual(21, calculator.Add(stringOfNumbers[3]));
+        [TestMethod]
+        public void Add_Should_ReturnTheNumber_When_NumbersContainsSingleNumber()
+        {
+            var input = new string[] { "0", "1", "255" };
+
+            foreach (var i in input)
+            {
+                Assert.AreEqual(Int32.Parse(i), sck.Add(i));
+            }
+        }
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsTwoNumbers()
+        {
+            Assert.AreEqual(3, sck.Add("1,2"));
+            Assert.AreEqual(157, sck.Add("145,12"));
+            Assert.AreEqual(1166, sck.Add("347,819"));
+        }
+
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsMoreThanTwoNumbers()
+        {
+            Assert.AreEqual(6, sck.Add("1,2,3"));
+            Assert.AreEqual(310, sck.Add("145,12,54,99"));
+            Assert.AreEqual(1206, sck.Add("347,819,3,22,15"));
+        }
+
+        [TestMethod]
+        public void Add_Should_SupportNewlineSeparator()
+        {
+            Assert.AreEqual(3, sck.Add("1\n2"));
+            Assert.AreEqual(157, sck.Add("145\n12"));
+            Assert.AreEqual(1206, sck.Add("347\n819,3,22\n15"));
         }
     }
 }

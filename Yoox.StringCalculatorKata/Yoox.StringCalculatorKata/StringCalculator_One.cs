@@ -4,20 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yoox.StringCalculatorKata
+namespace Yoox.StringCalculatorKataOne
 {
-    public class StringCalculator_One
+    public class StringCalculator
     {
         public int Add(string numbers)
         {
-            if (numbers.Equals(""))
+            if (String.IsNullOrEmpty(numbers))
             {
                 return 0;
             }
 
-            return numbers.Split(',')
-                          .Select(n => Int32.Parse(n))
-                          .Sum();
+            return numbers.Split(',', '\n').Sum(s => Int32.Parse(s));
         }
     }
 }
