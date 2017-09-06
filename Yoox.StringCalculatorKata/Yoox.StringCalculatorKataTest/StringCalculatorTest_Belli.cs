@@ -111,6 +111,7 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
             Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
             Assert.AreEqual(9, sck.Add("//[[**]]\n2[**]3[**]4"));
+            Assert.AreEqual(9, sck.Add("//[///[]\n]\n]\n2///[]\n]\n3///[]\n]\n4"));
         }
     }
 }

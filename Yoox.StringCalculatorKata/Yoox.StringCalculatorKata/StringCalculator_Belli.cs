@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Yoox.StringCalculatorKata
@@ -18,14 +19,14 @@ namespace Yoox.StringCalculatorKata
             {
 
                 var currentDelimiter = numbers[2].ToString();
-                
+
                 if (numbers.Contains("//[") && numbers.Contains("]\n"))
                 {
-                    currentDelimiter = numbers.Remove(numbers.IndexOf("]\n")).Substring(3);
+                    currentDelimiter = numbers.Remove(Regex.Match(numbers, "]\\n-{0,1}[0-9]").Index).Substring(3);
+
                     numbers = numbers.Substring(2);
                 }
-                
-                
+
                 numbers = numbers.Replace(currentDelimiter, delimiter.ToString());
                 numbers = numbers.Substring(4);
 
