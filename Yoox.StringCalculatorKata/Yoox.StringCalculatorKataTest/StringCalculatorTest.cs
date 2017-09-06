@@ -25,7 +25,7 @@ namespace Yoox.StringCalculatorKataTest
         {
             var input = new string[] { "0", "1", "255" };
 
-            foreach(var i in input)
+            foreach (var i in input)
             {
                 Assert.AreEqual(Int32.Parse(i), sck.Add(i));
             }
