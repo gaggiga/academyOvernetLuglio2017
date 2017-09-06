@@ -73,7 +73,7 @@ namespace Yoox.StringCalculatorKataTest
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Assert.AreEqual("negatives not allowed: -1", e.Message);
+                Assert.AreEqual("Negatives not allowed: -1", e.Message);
             }
             catch (Exception e)
             {
@@ -87,7 +87,7 @@ namespace Yoox.StringCalculatorKataTest
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Assert.AreEqual("negatives not allowed: -1,-3", e.Message);
+                Assert.AreEqual("Negatives not allowed: -1,-3", e.Message);
             }
             catch (Exception e)
             {
@@ -104,12 +104,13 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(4, sck.Add("1,1002,3,4005"));
         }
 
-        //[TestMethod]
-        //public void Add_Should_ReturnTheSum_When_NumbersContainsDelimitersOfDifferentLenght()
-        //{
+        [TestMethod]
+        public void Add_Should_ReturnTheSum_When_NumbersContainsDelimitersOfDifferentLenght()
+        {
 
-        //    Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
-        //    Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
-        //}
+            Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
+            Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
+            Assert.AreEqual(9, sck.Add("//[[**]]\n2[**]3[**]4"));
+        }
     }
 }
