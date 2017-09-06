@@ -107,11 +107,14 @@ namespace Yoox.StringCalculatorKataTest
         [TestMethod]
         public void Add_Should_ReturnTheSum_When_NumbersContainsDelimitersOfDifferentLenght()
         {
-
+            Assert.AreEqual(158, sck.Add("//[***]\n145***12***1"));
+            Assert.AreEqual(1171, sck.Add("//[ - ]\n347 - 819 - 4 - 1"));
+            Assert.AreEqual(1170, sck.Add("//[*[]*]\n347*[]*819*[]*4"));
             Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
             Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
             Assert.AreEqual(9, sck.Add("//[[**]]\n2[**]3[**]4"));
             Assert.AreEqual(9, sck.Add("//[///[]\n]\n]\n2///[]\n]\n3///[]\n]\n4"));
+            Assert.AreEqual(1171, sck.Add("//[ \n ]\n347 \n 819 \n 4 \n 1"));
         }
     }
 }

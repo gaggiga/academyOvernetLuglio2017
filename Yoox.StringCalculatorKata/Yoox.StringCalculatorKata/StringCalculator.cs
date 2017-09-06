@@ -11,29 +11,29 @@ namespace Yoox.StringCalculatorKata
     {
         public int Add(string numbers)
         {
-            var delimiter = ',';
-
             if (String.IsNullOrEmpty(numbers)) return 0;
+            var delimiter = ",";
 
             if (numbers.StartsWith("//"))
             {
-                var currentDelimiter = numbers[2];
-                numbers = numbers.Substring(4);
+                var match = Regex.Match(numbers, @"//\[(.+)\]\n|//(.|\n)\n", RegexOptions.Singleline);
+
+                var currentDelimiter = match.Groups.Cast<Group>().Skip(1).First(g => g.Success).Value;
+                numbers = numbers.Substring(match.Value.Length);
                 numbers = numbers.Replace(currentDelimiter, delimiter);
 
-                if (currentDelimiter == '-')
+                if (currentDelimiter == "-")
                     numbers = ReplaceDash(numbers, delimiter);
             }
             else
             {
-                numbers = numbers.Replace('\n', delimiter);
+                numbers = numbers.Replace("\n", delimiter);
             }
 
-            var values = numbers.Split(delimiter).Select(s => Int32.Parse(s));
+            var values = numbers.Split(delimiter[0]).Select(s => Int32.Parse(s));
 
             if (values.Any(v => v < 0))
             {
-                //var list = values.Where(v => v < 0).Aggregate("", (acc, val) => acc += val.ToString() + ",");
                 var list = String.Join(",", values.Where(v => v < 0).Select(v => v.ToString()).ToArray());
                 throw new ArgumentOutOfRangeException("Negatives not allowed: " + list, null as Exception);
             }
@@ -41,9 +41,9 @@ namespace Yoox.StringCalculatorKata
             return values.Where(v => v <= 1000).Sum();
         }
 
-        private string ReplaceDash(string numbers, char delimiter)
+        private string ReplaceDash(string numbers, string delimiter)
         {
-            numbers = numbers.Replace(delimiter.ToString() + delimiter.ToString(), delimiter.ToString() + "-");
+            numbers = numbers.Replace(delimiter + delimiter, delimiter + "-");
 
             if (numbers.StartsWith(","))
             {

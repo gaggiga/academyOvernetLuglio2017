@@ -101,5 +101,18 @@ namespace Yoox.StringCalculatorKataTest
             Assert.AreEqual(158, sck.Add("145,12,1234,1"));
             Assert.AreEqual(1171, sck.Add("347,2000,819,4,1"));
         }
+
+        [TestMethod]
+        public void Add_Should_SupportAnyLengthDelimiters()
+        {
+            Assert.AreEqual(158, sck.Add("//[***]\n145***12***1"));
+            Assert.AreEqual(1171, sck.Add("//[ - ]\n347 - 819 - 4 - 1"));
+            Assert.AreEqual(1170, sck.Add("//[*[]*]\n347*[]*819*[]*4"));
+            Assert.AreEqual(1171, sck.Add("//[ \n ]\n347 \n 819 \n 4 \n 1"));
+            Assert.AreEqual(3, sck.Add("//[;;;]\n1;;;2"));
+            Assert.AreEqual(6, sck.Add("//[---]\n1---2---3"));
+            Assert.AreEqual(9, sck.Add("//[[**]]\n2[**]3[**]4"));
+            //Assert.AreEqual(9, sck.Add("//[///[]\n]\n]\n2///[]\n]\n3///[]\n]\n4"));
+        }
     }
 }
