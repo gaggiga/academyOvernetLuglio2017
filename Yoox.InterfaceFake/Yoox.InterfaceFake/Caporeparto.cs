@@ -17,7 +17,7 @@ namespace Yoox.InterfaceFake
         {
             foreach(var o in this.Operai)
             {
-                for(var i = 0; i < quanto; i++)
+                for(var i = 0; i < Math.Min(6, quanto); i++)
                 {
                     o.Lavora();
                 }
