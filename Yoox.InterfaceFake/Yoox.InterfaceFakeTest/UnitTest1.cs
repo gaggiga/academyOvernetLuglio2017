@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Yoox.InterfaceFake;
+using Moq;
 
 namespace Yoox.InterfaceFakeTest
 {
@@ -11,26 +12,20 @@ namespace Yoox.InterfaceFakeTest
         public void FaiLavorare_ConDueOperaiPassando3_DeveFarLavorareInTotale6()
         {
             // Arrange
-            var myArray = new ILavoro[]
-            {
-                new LavoroCheConta(), new LavoroCheConta()
-            };
+            var myMock = new Mock<ILavoro>();
+            var conta = 0;
 
-            var capo = new Caporeparto(myArray);
-            //var capo = new Caporeparto(new Operaio(), new Operaio());
+            myMock
+                .Setup(o => o.Lavora())
+                .Callback(() => conta++);
+
+            var capo = new Caporeparto(myMock.Object, myMock.Object);
 
             // Act
             capo.FaiLavorare(3);
 
             // Assert
-            var totale = 0;
-
-            foreach(LavoroCheConta o in myArray)
-            {
-                totale += o.NumeroChiamate;
-            }
-
-            Assert.AreEqual(6, totale);
+            Assert.AreEqual(6, conta);
         }
     }
 }
