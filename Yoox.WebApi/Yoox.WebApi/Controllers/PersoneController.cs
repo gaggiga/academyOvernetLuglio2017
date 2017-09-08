@@ -14,13 +14,13 @@ namespace Yoox.WebApi.Controllers
 {
     public class PersoneController : ApiController
     {
-        private IDbContext db = new MyDbContext();
+        private MyDbService db;
 
-        public PersoneController(IDbContext db = null)
+        public PersoneController(MyDbService db = null)
         {
             if(db == null)
             {
-                db = new MyDbContext();
+                db = new MyDbService();
             }
 
             this.db = db;
@@ -29,14 +29,14 @@ namespace Yoox.WebApi.Controllers
         // GET: api/Persone
         public IQueryable<Persona> GetPersone()
         {
-            return db.Persone;
+            return db.GetPersone();
         }
 
         // GET: api/Persone/5
         [ResponseType(typeof(Persona))]
         public IHttpActionResult GetPersona(int id)
         {
-            Persona persona = db.Persone.Find(id);
+            Persona persona = db.Find(id);
             if (persona == null)
             {
                 return NotFound();
@@ -59,23 +59,7 @@ namespace Yoox.WebApi.Controllers
                 return BadRequest();
             }
 
-            db.Entry(persona).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            db.Put(persona);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -89,26 +73,17 @@ namespace Yoox.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Persone.Add(persona);
-            db.SaveChanges();
+            db.Post(persona);
 
             return CreatedAtRoute("DefaultApi", new { id = persona.Id }, persona);
         }
 
         // DELETE: api/Persone/5
-        [ResponseType(typeof(Persona))]
         public IHttpActionResult DeletePersona(int id)
         {
-            Persona persona = db.Persone.Find(id);
-            if (persona == null)
-            {
-                return NotFound();
-            }
+            db.Delete(id);
 
-            db.Persone.Remove(persona);
-            db.SaveChanges();
-
-            return Ok(persona);
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
@@ -120,9 +95,5 @@ namespace Yoox.WebApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool PersonaExists(int id)
-        {
-            return db.Persone.Count(e => e.Id == id) > 0;
-        }
     }
 }

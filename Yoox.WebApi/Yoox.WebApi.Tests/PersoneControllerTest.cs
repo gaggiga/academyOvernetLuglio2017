@@ -34,7 +34,8 @@ namespace Yoox.WebApi.Tests
             var mockContext = new Mock<IDbContext>();
             mockContext.Setup(c => c.Persone).Returns(mockSet.Object);
 
-            var controller = new PersoneController(mockContext.Object);
+            var mdbs = new MyDbService(mockContext.Object);
+            var controller = new PersoneController(mdbs);
             var persone = controller.GetPersone();
 
             foreach(var p in data)
@@ -65,7 +66,8 @@ namespace Yoox.WebApi.Tests
             var mockContext = new Mock<IDbContext>();
             mockContext.Setup(c => c.Persone).Returns(mockSet.Object);
 
-            var controller = new PersoneController(mockContext.Object);
+            var mdbs = new MyDbService(mockContext.Object);
+            var controller = new PersoneController(mdbs);
             IHttpActionResult actionResult = controller.GetPersona(2);
             var contentResult = actionResult as OkNegotiatedContentResult<Persona>;
 
@@ -88,7 +90,8 @@ namespace Yoox.WebApi.Tests
             var mockContext = new Mock<IDbContext>();
             mockContext.Setup(c => c.Persone).Returns(mockSet.Object);
 
-            var controller = new PersoneController(mockContext.Object);
+            var mdbs = new MyDbService(mockContext.Object);
+            var controller = new PersoneController(mdbs);
             IHttpActionResult actionResult = controller.GetPersona(2);
             Assert.IsInstanceOfType(actionResult, typeof(NotFoundResult));
         }
