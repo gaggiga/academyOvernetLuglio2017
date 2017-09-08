@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Yoox.Test;
 
 namespace Yoox.Test
@@ -17,15 +18,15 @@ namespace Yoox.Test
             this.myFile = myFile;
         }
 
-        public void MoveAll(string v1, string v2)
+        public void MoveAll(string sourcePath, string destinationPath)
         {
-            var files = myFile.GetFiles(v1);
+            var files = myFile.GetFiles(sourcePath);
 
             if (files == null) return;
 
             foreach(var file in files)
             {
-                var destination = @"d:\miofile.txt";
+                var destination = Path.Combine(destinationPath, Path.GetFileName(file));
                 myFile.Move(file, destination);
             }
         }
