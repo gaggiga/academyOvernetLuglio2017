@@ -155,5 +155,33 @@ namespace Yoox.TestTest
                                      , It.Is<string>(s => s == @"d:\isValid\bigFiles\miofile3.txt")), Times.Once());
 
         }
+
+        [TestMethod]
+        public void MoveAll_Should_WriteADescriptionLineForEveryFileMoved()
+        {
+            // Arrange
+            var myConsole = new Mock<IPrint>();
+            myConsole.Setup(s => s.Print(It.IsAny<string>()));
+
+            var myFile = new Mock<IFile>();
+            myFile.Setup(f => f.GetFiles(It.IsAny<string>()))
+                  .Returns(new string[] { @"c:\miofile1.txt", @"c:\miofile2.txt", @"c:\miofile3.gif" });
+
+            myFile.Setup(f => f.GetFileSize(It.IsIn<string>(@"c:\miofile1.txt", @"c:\miofile3.gif")))
+                  .Returns(1024);
+            myFile.Setup(f => f.GetFileSize(It.Is<string>(s => s == @"c:\miofile2.txt")))
+                  .Returns(1025);
+
+            myFile.Setup(f => f.Move(It.IsAny<string>(), It.IsAny<string>()));
+
+            // Act
+            var filesMover = new FilesMover(myFile.Object, myConsole.Object);
+            filesMover.MoveAll(@"c:\", @"d:\");
+
+            // Assert
+            myConsole.Verify(c => c.Print(It.Is<string>(s => s == @"Il file miofile1.txt è stato spostato da c:\ a d:\notValid")), Times.Once());
+            myConsole.Verify(c => c.Print(It.Is<string>(s => s == @"Il file miofile2.txt è stato spostato da c:\ a d:\isValid\bigFiles")), Times.Once());
+            myConsole.Verify(c => c.Print(It.Is<string>(s => s == @"Il file miofile3.gif è stato spostato da c:\ a d:\isValid\smallPictures")), Times.Once());
+        }
     }
 }

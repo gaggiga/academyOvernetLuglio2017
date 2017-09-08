@@ -7,15 +7,18 @@ namespace Yoox.Test
     public class FilesMover
     {
         private IFile myFile;
+        private IPrint myConsole;
 
-        public FilesMover()
+        public FilesMover(IFile myFile = null, IPrint myConsole = null)
         {
-            myFile = new FileSystem();
-        }
+            if(myFile == null)
+                myFile = new FileSystem();
 
-        public FilesMover(IFile myFile)
-        {
+            if (myConsole == null)
+                myConsole = new ConsolePrint();
+
             this.myFile = myFile;
+            this.myConsole = myConsole;
         }
 
         public void MoveAll(string sourcePath, string destinationPath)
@@ -30,76 +33,13 @@ namespace Yoox.Test
                 
                 var destination = Path.Combine(destinationPath, f.DestinationPath);
                 myFile.Move(f.FilePath, destination);
+
+                var folder = Path.Combine(destinationPath, f.DestinationFolder);
+                var message = $"Il file {f.FileName} è stato spostato da {sourcePath} a {folder}";
+                myConsole.Print(message);
             }
         }
 
     }    
 
-    public class MyFile
-    {
-        private IFile myFile;
-        public string FilePath { get; set; }
-
-        public MyFile(IFile myFile)
-        {
-            this.myFile = myFile;
-        }
-
-        public string FileName
-        {
-            get
-            {
-                return Path.GetFileName(FilePath);
-            }
-        }
-
-        public bool IsPicture
-        {
-            get
-            {
-                return Path.GetExtension(FilePath).Equals(".gif", StringComparison.InvariantCultureIgnoreCase);
-            }
-        }
-
-        public bool IsBig
-        {
-            get
-            {
-                return this.myFile.GetFileSize(FilePath) > 1024;
-            }
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-                return IsPicture || IsBig;
-            }
-        }
-
-        public string DestinationPath
-        {
-            get
-            {
-                var subfolder = "";
-
-                if (IsPicture)
-                {
-                    subfolder = @"smallPictures";
-
-                    if (IsBig)
-                    {
-                        subfolder = @"bigPictures";
-                    }
-                } else if (IsBig)
-                {
-                    subfolder = @"bigFiles";
-                }
-
-                var result = !String.IsNullOrEmpty(subfolder) ? Path.Combine("isValid", subfolder) : "notValid";
-
-                return Path.Combine(result, FileName);
-            }
-        }
-    }
 }
