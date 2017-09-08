@@ -20,28 +20,23 @@ namespace Yoox.Test
 
         public void MoveAll(string sourcePath, string destinationPath)
         {
+            var isValidPath = Path.Combine(destinationPath, "isValid");
             var files = myFile.GetFiles(sourcePath);
 
             if (files == null) return;
 
             foreach(var file in files)
             {
-                var destination = Path.Combine(destinationPath, Path.GetFileName(file));
+                var destination = IsValid(file) ? isValidPath : destinationPath;
+                destination = Path.Combine(destination, Path.GetFileName(file));
                 myFile.Move(file, destination);
             }
         }
-    }
 
-    public class FileSystem : IFile
-    {
-        public string[] GetFiles(string path)
+        private bool IsValid(string filePath)
         {
-            return System.IO.Directory.GetFiles(path);
+            return Path.GetExtension(filePath).Equals(".gif", StringComparison.InvariantCultureIgnoreCase)
+                || this.myFile.GetFileSize(filePath) > 1024;
         }
-
-        public void Move(string fileSource, string fileDestination)
-        {
-            System.IO.File.Move(fileSource, fileDestination);
-        }
-    }
+    }    
 }

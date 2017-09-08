@@ -42,6 +42,7 @@ namespace Yoox.TestTest
             var myFile = new Mock<IFile>();
             myFile.Setup(f => f.GetFiles(It.IsAny<string>()))
                   .Returns(new string[] { @"c:\miofile.txt" });
+            myFile.Setup(f => f.GetFileSize(It.IsAny<string>())).Returns(1024);
 
             myFile.Setup(f => f.Move( It.IsAny<string>(), It.IsAny<string>()));
             
@@ -62,6 +63,7 @@ namespace Yoox.TestTest
             var myFile = new Mock<IFile>();
             myFile.Setup(f => f.GetFiles(It.IsAny<string>()))
                   .Returns(new string[] { @"c:\miofile1.txt", @"c:\miofile2.txt" , @"c:\miofile3.txt" });
+            myFile.Setup(f => f.GetFileSize(It.IsAny<string>())).Returns(1024);
 
             myFile.Setup(f => f.Move(It.IsAny<string>(), It.IsAny<string>()));
 
@@ -77,6 +79,56 @@ namespace Yoox.TestTest
                                      , It.Is<string>(s => s == @"d:\miofile2.txt")), Times.Once());
             myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile3.txt")
                                      , It.Is<string>(s => s == @"d:\miofile3.txt")), Times.Once());
+
+        }
+
+        [TestMethod]
+        public void MoveAll_Should_MoveAllGifInIsValidSubFolder()
+        {
+            // Arrange
+            var myFile = new Mock<IFile>();
+            myFile.Setup(f => f.GetFiles(It.IsAny<string>()))
+                  .Returns(new string[] { @"c:\miofile1.gif", @"c:\miofile2.gif" });
+            myFile.Setup(f => f.GetFileSize(It.IsAny<string>())).Returns(1024);
+
+            myFile.Setup(f => f.Move(It.IsAny<string>(), It.IsAny<string>()));
+
+            // Act
+            var filesMover = new FilesMover(myFile.Object);
+            filesMover.MoveAll(@"c:\", @"d:\");
+
+            // Assert
+            myFile.Verify(f => f.GetFiles(It.Is<string>(s => s == @"c:\")), Times.Once());
+            myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile1.gif")
+                                     , It.Is<string>(s => s == @"d:\isValid\miofile1.gif")), Times.Once());
+            myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile2.gif")
+                                     , It.Is<string>(s => s == @"d:\isValid\miofile2.gif")), Times.Once());
+
+        }
+
+        [TestMethod]
+        public void MoveAll_Should_MoveAllBigFilesInIsValidSubFolder()
+        {
+            // Arrange
+            var myFile = new Mock<IFile>();
+            myFile.Setup(f => f.GetFiles(It.IsAny<string>()))
+                  .Returns(new string[] { @"c:\miofile1.txt", @"c:\miofile2.txt", @"c:\miofile3.txt" });
+            myFile.Setup(f => f.GetFileSize(It.IsAny<string>())).Returns(1025);
+
+            myFile.Setup(f => f.Move(It.IsAny<string>(), It.IsAny<string>()));
+
+            // Act
+            var filesMover = new FilesMover(myFile.Object);
+            filesMover.MoveAll(@"c:\", @"d:\");
+
+            // Assert
+            myFile.Verify(f => f.GetFiles(It.Is<string>(s => s == @"c:\")), Times.Once());
+            myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile1.txt")
+                                     , It.Is<string>(s => s == @"d:\isValid\miofile1.txt")), Times.Once());
+            myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile2.txt")
+                                     , It.Is<string>(s => s == @"d:\isValid\miofile2.txt")), Times.Once());
+            myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile3.txt")
+                                     , It.Is<string>(s => s == @"d:\isValid\miofile3.txt")), Times.Once());
 
         }
     }

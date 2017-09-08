@@ -10,5 +10,6 @@ namespace Yoox.Test
     {
         void Move(string fileSource, string fileDestination);
         string[] GetFiles(string path);
+        long GetFileSize(string filePath);
     }
 }
