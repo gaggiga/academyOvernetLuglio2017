@@ -20,7 +20,6 @@ namespace Yoox.Test
 
         public void MoveAll(string sourcePath, string destinationPath)
         {
-            var isValidPath = Path.Combine(destinationPath, "isValid");
             var files = myFile.GetFiles(sourcePath);
 
             if (files == null) return;
@@ -97,7 +96,7 @@ namespace Yoox.Test
                     subfolder = @"bigFiles";
                 }
 
-                var result = !String.IsNullOrEmpty(subfolder) ? Path.Combine("isValid", subfolder) : "";
+                var result = !String.IsNullOrEmpty(subfolder) ? Path.Combine("isValid", subfolder) : "notValid";
 
                 return Path.Combine(result, FileName);
             }

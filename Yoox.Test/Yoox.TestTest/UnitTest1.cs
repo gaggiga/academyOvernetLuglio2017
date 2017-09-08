@@ -36,7 +36,7 @@ namespace Yoox.TestTest
         }
 
         [TestMethod]
-        public void MoveAll_Should_MoveTheSingleFileContained()
+        public void MoveAll_Should_MoveTheSingleNotValidFileContainedInnotValidSubfolder()
         {
             // Arrange
             var myFile = new Mock<IFile>();
@@ -53,11 +53,11 @@ namespace Yoox.TestTest
             // Assert
             myFile.Verify(f => f.GetFiles(It.Is<string>(s => s == @"c:\")), Times.Once());
             myFile.Verify(f => f.Move( It.Is<string>(s => s == @"c:\miofile.txt")
-                                     , It.Is<string>(s => s == @"d:\miofile.txt")), Times.Once());
+                                     , It.Is<string>(s => s == @"d:\notValid\miofile.txt")), Times.Once());
         }
 
         [TestMethod]
-        public void MoveAll_Should_MoveAllGivenFilesInDestinationFolder()
+        public void MoveAll_Should_MoveAllGivenNotValidFilesNotValidSubFolder()
         {
             // Arrange
             var myFile = new Mock<IFile>();
@@ -74,11 +74,11 @@ namespace Yoox.TestTest
             // Assert
             myFile.Verify(f => f.GetFiles(It.Is<string>(s => s == @"c:\")), Times.Once());
             myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile1.txt")
-                                     , It.Is<string>(s => s == @"d:\miofile1.txt")), Times.Once());
+                                     , It.Is<string>(s => s == @"d:\notValid\miofile1.txt")), Times.Once());
             myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile2.txt")
-                                     , It.Is<string>(s => s == @"d:\miofile2.txt")), Times.Once());
+                                     , It.Is<string>(s => s == @"d:\notValid\miofile2.txt")), Times.Once());
             myFile.Verify(f => f.Move(It.Is<string>(s => s == @"c:\miofile3.txt")
-                                     , It.Is<string>(s => s == @"d:\miofile3.txt")), Times.Once());
+                                     , It.Is<string>(s => s == @"d:\notValid\miofile3.txt")), Times.Once());
 
         }
 
