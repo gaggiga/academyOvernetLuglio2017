@@ -27,16 +27,80 @@ namespace Yoox.Test
 
             foreach(var file in files)
             {
-                var destination = IsValid(file) ? isValidPath : destinationPath;
-                destination = Path.Combine(destination, Path.GetFileName(file));
-                myFile.Move(file, destination);
+                var f = new MyFile(myFile) { FilePath = file };
+                
+                var destination = Path.Combine(destinationPath, f.DestinationPath);
+                myFile.Move(f.FilePath, destination);
             }
         }
 
-        private bool IsValid(string filePath)
-        {
-            return Path.GetExtension(filePath).Equals(".gif", StringComparison.InvariantCultureIgnoreCase)
-                || this.myFile.GetFileSize(filePath) > 1024;
-        }
     }    
+
+    public class MyFile
+    {
+        private IFile myFile;
+        public string FilePath { get; set; }
+
+        public MyFile(IFile myFile)
+        {
+            this.myFile = myFile;
+        }
+
+        public string FileName
+        {
+            get
+            {
+                return Path.GetFileName(FilePath);
+            }
+        }
+
+        public bool IsPicture
+        {
+            get
+            {
+                return Path.GetExtension(FilePath).Equals(".gif", StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
+
+        public bool IsBig
+        {
+            get
+            {
+                return this.myFile.GetFileSize(FilePath) > 1024;
+            }
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                return IsPicture || IsBig;
+            }
+        }
+
+        public string DestinationPath
+        {
+            get
+            {
+                var subfolder = "";
+
+                if (IsPicture)
+                {
+                    subfolder = @"smallPictures";
+
+                    if (IsBig)
+                    {
+                        subfolder = @"bigPictures";
+                    }
+                } else if (IsBig)
+                {
+                    subfolder = @"bigFiles";
+                }
+
+                var result = !String.IsNullOrEmpty(subfolder) ? Path.Combine("isValid", subfolder) : "";
+
+                return Path.Combine(result, FileName);
+            }
+        }
+    }
 }
